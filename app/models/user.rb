@@ -97,6 +97,30 @@ class User < ActiveRecord::Base
     name.split(" ").first unless name.blank?
   end
 
+  def self.find_for_googleapps_oauth(omniauth_info)
+    name = omniauth_info.name
+    email = omniauth_info.email.downcase
+
+    if @user = User.find_by_email(email)
+      return @user
+    else #create a user with stub pwd
+      password = generate_random_password
+      @user = User.create(:name => name,
+        :email => email,
+        :password => password,
+        :password_confirmation => password
+      )
+    end
+  end
+
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session['devise.googleapps_data'] && session['devise.googleapps_data']['user_info']
+        user.email = data['email']
+      end
+    end
+  end
+
   def self.find_for_ldap_auth(omniauth_info)
     name = omniauth_info.name.force_encoding("utf-8")
     email = omniauth_info.email.downcase

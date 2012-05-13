@@ -125,6 +125,10 @@ module ApplicationHelper
     controller.controller_name == "help" 
   end
 
+  def google_apps_enable?
+    Devise.omniauth_providers.include?(:google_apps)
+  end
+
   def ldap_enable?
     Devise.omniauth_providers.include?(:ldap)
   end

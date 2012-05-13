@@ -1,8 +1,18 @@
 # Copy this file to 'omniauth.rb' and configure it as necessary.
 # The wiki has further details on configuring each provider.
 
+require 'openid/store/filesystem'
+require 'openid/fetchers'
+
 Devise.setup do |config|
+  OpenID.fetcher.ca_file = "/etc/ssl/certs/ca-certificates.crt"
+
   # config.omniauth :github 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
+
+  # config.omniauth :google_apps,
+  #     :store => OpenID::Store::Filesystem.new('/tmp'),
+  #     :domain => 'your-domain.com',
+  #     :require => 'omniauth-google-apps'
 
   # config.omniauth :ldap, 
   #     :host => 'YOUR_LDAP_SERVER',
